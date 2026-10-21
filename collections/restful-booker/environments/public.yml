@@ -1,0 +1,4 @@
+name: public
+variables:
+  - name: baseUrl
+    value: https://restful-booker.herokuapp.com
