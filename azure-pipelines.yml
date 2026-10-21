@@ -34,6 +34,6 @@ steps:
   - task: PublishPipelineArtifact@1
     condition: succeededOrFailed()
     inputs:
-      targetPath: collections/restful-booker/reports
+      targetPath: reports
       artifact: bruno-reports
-    displayName: "Publish HTML report"
+    displayName: Publish HTML report
