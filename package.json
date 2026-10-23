@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "generate": "ts-node tools/generate-tests.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.x.x"
+  }
+}

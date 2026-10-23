@@ -16,4 +16,4 @@ runtime:
       value: 201
 
 settings:
-  endcodeUrl: true
+  encodeUrl: true
