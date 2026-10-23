@@ -8,10 +8,24 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: NodeTool@0
+  - task: UseNode@1
     inputs:
-      versionSpec: "22.x"
+      version: "22.x"
     displayName: "Install Node.js"
+
+  # Configurar la ruta del directorio de caché de npm
+  - script: |
+      echo "##vso[task.setvariable variable=npm_config_cache]$(Pipeline.Workspace)/.npm"
+    displayName: "Set npm cache folder"
+
+  # Tarea nativa de caché de Azure DevOps
+  - task: Cache@2
+    inputs:
+      key: 'npm | "$(Agent.OS)" | package.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: "$(Pipeline.Workspace)/.npm"
+    displayName: "Cache npm packages"
 
   - script: npm install -g @usebruno/cli
     displayName: "Install Bruno CLI"
@@ -28,12 +42,12 @@ steps:
     condition: succeededOrFailed()
     inputs:
       testResultsFormat: JUnit
-      testResultsFiles: reports/junit.xml
+      testResultsFiles: "$(Build.SourcesDirectory)/reports/junit.xml"
       testRunTitle: "Bruno API tests"
 
   - task: PublishPipelineArtifact@1
     condition: succeededOrFailed()
     inputs:
-      targetPath: reports
+      targetPath: "$(Build.SourcesDirectory)/reports"
       artifact: bruno-reports
-    displayName: Publish HTML report
+    displayName: "Publish HTML report"
