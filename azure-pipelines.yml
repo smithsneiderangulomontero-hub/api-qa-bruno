@@ -8,9 +8,9 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: UseNode@1
+  - task: NodeTool@0
     inputs:
-      version: "22.x"
+      versionSpec: "22.x"
     displayName: "Install Node.js"
 
   # Configurar la ruta del directorio de caché de npm
@@ -21,7 +21,7 @@ steps:
   # Tarea nativa de caché de Azure DevOps
   - task: Cache@2
     inputs:
-      key: 'npm | "$(Agent.OS)" | package.json'
+      key: 'npm | "$(Agent.OS)" | azure-pipelines.yml'
       restoreKeys: |
         npm | "$(Agent.OS)"
       path: "$(Pipeline.Workspace)/.npm"
