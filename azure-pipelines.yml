@@ -13,29 +13,32 @@ steps:
       versionSpec: "22.x"
     displayName: "Install Node.js"
 
-  # Configurar la ruta del directorio de caché de npm
   - script: |
       echo "##vso[task.setvariable variable=npm_config_cache]$(Pipeline.Workspace)/.npm"
     displayName: "Set npm cache folder"
 
-  # Tarea nativa de caché de Azure DevOps
   - task: Cache@2
     inputs:
-      key: 'npm | "$(Agent.OS)" | azure-pipelines.yml'
+      key: 'npm | "$(Agent.OS)" | package-lock.json'
       restoreKeys: |
         npm | "$(Agent.OS)"
       path: "$(Pipeline.Workspace)/.npm"
     displayName: "Cache npm packages"
 
-  - script: npm install -g @usebruno/cli
-    displayName: "Install Bruno CLI"
+  - script: npm ci
+    displayName: "Install dependencies"
+
+  - script: npm run typecheck
+    displayName: "Type-check generator"
 
   - script: |
-      mkdir -p $(Build.SourcesDirectory)/reports
-      bru run --env public \
-        --reporter-junit $(Build.SourcesDirectory)/reports/junit.xml \
-        --reporter-html $(Build.SourcesDirectory)/reports/report.html
-    workingDirectory: collections/restful-booker
+      set -o pipefail
+      mkdir -p reports
+      npm run test:ci 2>&1 | tee reports/bru-output.log
+      if grep -qi "skipping invalid file" reports/bru-output.log; then
+        echo "##vso[task.logissue type=error]Hay archivos .yml invalidos en la coleccion"
+        exit 1
+      fi
     displayName: "Run Bruno collection"
 
   - task: PublishTestResults@2

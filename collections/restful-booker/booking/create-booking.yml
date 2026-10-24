@@ -1,0 +1,39 @@
+info:
+  name: create-booking
+  type: http
+  seq: 1
+  tags:
+    - booking
+
+http:
+  method: POST
+  url: "{{baseUrl}}/booking"
+  headers:
+    - name: "Content-Type"
+      value: "application/json"
+    - name: "Accept"
+      value: "application/json"
+  body:
+    type: json
+    data: |-
+      {
+        "firstname": "John",
+        "lastname": "Doe",
+        "totalprice": 111,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-01-01",
+          "checkout": "2026-01-02"
+        },
+        "additionalneeds": "Breakfast"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: 200
+
+settings:
+  encodeUrl: true
