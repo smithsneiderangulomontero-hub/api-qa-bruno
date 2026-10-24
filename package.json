@@ -1,11 +1,14 @@
 {
   "scripts": {
     "generate": "ts-node tools/generate-tests.ts",
+    "typecheck": "tsc --noEmit",
     "test": "cd collections/restful-booker && bru run --env public",
-    "test:booking": "cd collections/restful-booker && bru run booking --env public"
+    "test:booking": "cd collections/restful-booker && bru run booking --env public",
+    "test:ci": "mkdir -p reports && cd collections/restful-booker && bru run --env public --reporter-junit ../../reports/junit.xml --reporter-html ../../reports/report.html"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
+    "@usebruno/cli": "^4.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
