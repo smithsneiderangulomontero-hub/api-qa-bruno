@@ -1,0 +1,18 @@
+{
+  "folder": "booking",
+  "name": "create-booking",
+  "method": "POST",
+  "url": "{{baseUrl}}/booking",
+  "expectedStatus": 200,
+  "body": {
+    "firstname": "John",
+    "lastname": "Doe",
+    "totalprice": 111,
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-01-01",
+      "checkout": "2026-01-02"
+    },
+    "additionalneeds": "Breakfast"
+  }
+}
